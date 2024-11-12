@@ -14,6 +14,18 @@ router.get("/", async (req, res) => {
     }
 });
 
+// Get a todo
+router.get("/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query("SELECT * FROM todos WHERE id = $1", [id]);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 // Add a new todo
 router.post("/", async (req, res) => {
     const { task } = req.body;
@@ -32,11 +44,11 @@ router.post("/", async (req, res) => {
 // Update a todo
 router.put("/:id", async (req, res) => {
     const { id } = req.params;
-    const { completed } = req.body;
+    const { task, completed } = req.body;
     try {
         const updatedTodo = await pool.query(
-            "UPDATE todos SET completed = $1 WHERE id = $2 RETURNING *",
-            [completed, id]
+            "UPDATE todos SET task = $1, completed = $2 WHERE id = $3 RETURNING *",
+            [task, completed, id]
         );
         res.json(updatedTodo.rows[0]);
     } catch (err) {
