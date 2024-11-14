@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from './Button';
+import axios from 'axios';
 
 interface InputFieldProps {
     onAdd: (text: string) => void;
@@ -7,14 +8,16 @@ interface InputFieldProps {
 
 const InputField: React.FC<InputFieldProps> = ({ onAdd }) => {
     const [task, setTask] = useState('');
+    // const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTask(e.target.value);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (task.trim()) {
+            await axios.post('http://localhost:5000/todos', { task });
             onAdd(task);
             setTask('');
         }
@@ -28,8 +31,7 @@ const InputField: React.FC<InputFieldProps> = ({ onAdd }) => {
                 onChange={handleChange} 
                 placeholder="Add a new task" 
             />
-            <Button onClick={() => handleSubmit}>Add Todo</Button>
-            {/* <button type="submit">Add</button> */}
+            <Button onClick={() => handleSubmit} buttonType="add">Add Todo</Button>
         </form>
     );
 };

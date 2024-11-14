@@ -1,27 +1,22 @@
 import InputField from './components/InputField';
-// import Button from './components/Button';
 import TodoList from './components/TodoList';
 import { useState } from 'react';
+import './App.css';
 
 function App() {
-  const [todos, setTodos] = useState<string[]>([]);
-  const [input, setInput] = useState<string>('');
+  const [tasks, setTasks] = useState<string[]>([]);
 
-  const addTodo = () => {
-    if (input.trim()) {
-      setTodos([...todos, input]);
-      setInput('');
+  const addTodo = (task: string) => {
+    if (task.trim()) {
+      setTasks([...tasks, task]);
     }
   };
 
   return (
     <div className="App">
-      <h1>Todo App</h1>
+      <h1 className="text-4xl font-bold text-center my-4 text-gray-800">Todo List</h1>
       <InputField onAdd={addTodo} />
-      {/* <InputField value={input} onChange={(e) => setInput(e.target.value)} /> */}
-      {/* <Button onClick={addTodo}>Add Todo</Button> */}
-      <TodoList />
-      {/* <TodoList todos={todos} /> */}
+      <TodoList tasks={tasks}/>
     </div>
   );
 }
